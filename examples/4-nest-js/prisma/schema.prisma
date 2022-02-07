@@ -28,4 +28,6 @@ model Post {
   content   String?
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
+  /// @TypeGraphQL.omit(output: true, input: true)
+  foo       Int      @default(1)
 }

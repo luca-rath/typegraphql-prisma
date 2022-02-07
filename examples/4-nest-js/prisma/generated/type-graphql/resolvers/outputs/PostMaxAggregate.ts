@@ -41,4 +41,9 @@ export class PostMaxAggregate {
     nullable: true
   })
   authorId!: string | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true
+  })
+  foo!: number | null;
 }

@@ -8,9 +8,11 @@ type AffectedRowsOutput {
 }
 
 type AggregatePost {
+  _avg: PostAvgAggregate
   _count: PostCountAggregate
   _max: PostMaxAggregate
   _min: PostMinAggregate
+  _sum: PostSumAggregate
 }
 
 type AggregateUser {
@@ -70,6 +72,41 @@ input DateTimeWithAggregatesFilter {
   notIn: [DateTime!]
 }
 
+input IntFieldUpdateOperationsInput {
+  decrement: Int
+  divide: Int
+  increment: Int
+  multiply: Int
+  set: Int
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input IntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
+  notIn: [Int!]
+}
+
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createUser(data: UserCreateInput!): User!
@@ -123,6 +160,17 @@ input NestedDateTimeWithAggregatesFilter {
   notIn: [DateTime!]
 }
 
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
 input NestedIntFilter {
   equals: Int
   gt: Int
@@ -142,6 +190,22 @@ input NestedIntNullableFilter {
   lt: Int
   lte: Int
   not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
+input NestedIntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
   notIn: [Int!]
 }
 
@@ -216,10 +280,19 @@ type Post {
   authorId: String
   content: String
   createdAt: DateTime!
+  foo: Int!
   id: String!
   published: Boolean!
   title: String!
   updatedAt: DateTime!
+}
+
+type PostAvgAggregate {
+  foo: Float
+}
+
+input PostAvgOrderByAggregateInput {
+  foo: SortOrder
 }
 
 type PostCountAggregate {
@@ -227,6 +300,7 @@ type PostCountAggregate {
   authorId: Int!
   content: Int!
   createdAt: Int!
+  foo: Int!
   id: Int!
   published: Int!
   title: Int!
@@ -237,6 +311,7 @@ input PostCountOrderByAggregateInput {
   authorId: SortOrder
   content: SortOrder
   createdAt: SortOrder
+  foo: SortOrder
   id: SortOrder
   published: SortOrder
   title: SortOrder
@@ -247,6 +322,7 @@ input PostCreateInput {
   author: UserCreateNestedOneWithoutPostsInput
   content: String
   createdAt: DateTime
+  foo: Int
   id: String
   published: Boolean!
   title: String!
@@ -267,6 +343,7 @@ input PostCreateOrConnectWithoutAuthorInput {
 input PostCreateWithoutAuthorInput {
   content: String
   createdAt: DateTime
+  foo: Int
   id: String
   published: Boolean!
   title: String!
@@ -274,12 +351,15 @@ input PostCreateWithoutAuthorInput {
 }
 
 type PostGroupBy {
+  _avg: PostAvgAggregate
   _count: PostCountAggregate
   _max: PostMaxAggregate
   _min: PostMinAggregate
+  _sum: PostSumAggregate
   authorId: String
   content: String
   createdAt: DateTime!
+  foo: Int!
   id: String!
   published: Boolean!
   title: String!
@@ -296,6 +376,7 @@ type PostMaxAggregate {
   authorId: String
   content: String
   createdAt: DateTime
+  foo: Int
   id: String
   published: Boolean
   title: String
@@ -306,6 +387,7 @@ input PostMaxOrderByAggregateInput {
   authorId: SortOrder
   content: SortOrder
   createdAt: SortOrder
+  foo: SortOrder
   id: SortOrder
   published: SortOrder
   title: SortOrder
@@ -316,6 +398,7 @@ type PostMinAggregate {
   authorId: String
   content: String
   createdAt: DateTime
+  foo: Int
   id: String
   published: Boolean
   title: String
@@ -326,6 +409,7 @@ input PostMinOrderByAggregateInput {
   authorId: SortOrder
   content: SortOrder
   createdAt: SortOrder
+  foo: SortOrder
   id: SortOrder
   published: SortOrder
   title: SortOrder
@@ -337,12 +421,15 @@ input PostOrderByRelationAggregateInput {
 }
 
 input PostOrderByWithAggregationInput {
+  _avg: PostAvgOrderByAggregateInput
   _count: PostCountOrderByAggregateInput
   _max: PostMaxOrderByAggregateInput
   _min: PostMinOrderByAggregateInput
+  _sum: PostSumOrderByAggregateInput
   authorId: SortOrder
   content: SortOrder
   createdAt: SortOrder
+  foo: SortOrder
   id: SortOrder
   published: SortOrder
   title: SortOrder
@@ -354,6 +441,7 @@ input PostOrderByWithRelationInput {
   authorId: SortOrder
   content: SortOrder
   createdAt: SortOrder
+  foo: SortOrder
   id: SortOrder
   published: SortOrder
   title: SortOrder
@@ -364,6 +452,7 @@ enum PostScalarFieldEnum {
   authorId
   content
   createdAt
+  foo
   id
   published
   title
@@ -377,6 +466,7 @@ input PostScalarWhereInput {
   authorId: StringNullableFilter
   content: StringNullableFilter
   createdAt: DateTimeFilter
+  foo: IntFilter
   id: StringFilter
   published: BoolFilter
   title: StringFilter
@@ -390,16 +480,26 @@ input PostScalarWhereWithAggregatesInput {
   authorId: StringNullableWithAggregatesFilter
   content: StringNullableWithAggregatesFilter
   createdAt: DateTimeWithAggregatesFilter
+  foo: IntWithAggregatesFilter
   id: StringWithAggregatesFilter
   published: BoolWithAggregatesFilter
   title: StringWithAggregatesFilter
   updatedAt: DateTimeWithAggregatesFilter
 }
 
+type PostSumAggregate {
+  foo: Int
+}
+
+input PostSumOrderByAggregateInput {
+  foo: SortOrder
+}
+
 input PostUpdateInput {
   author: UserUpdateOneWithoutPostsInput
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  foo: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
@@ -409,6 +509,7 @@ input PostUpdateInput {
 input PostUpdateManyMutationInput {
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  foo: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
@@ -441,6 +542,7 @@ input PostUpdateWithWhereUniqueWithoutAuthorInput {
 input PostUpdateWithoutAuthorInput {
   content: NullableStringFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  foo: IntFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   published: BoolFieldUpdateOperationsInput
   title: StringFieldUpdateOperationsInput
@@ -461,6 +563,7 @@ input PostWhereInput {
   authorId: StringNullableFilter
   content: StringNullableFilter
   createdAt: DateTimeFilter
+  foo: IntFilter
   id: StringFilter
   published: BoolFilter
   title: StringFilter

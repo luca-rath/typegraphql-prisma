@@ -44,4 +44,6 @@ export class Post {
     nullable: true
   })
   authorId?: string | null;
+
+  foo?: number;
 }
